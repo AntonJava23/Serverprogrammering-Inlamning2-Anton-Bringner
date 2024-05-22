@@ -8,9 +8,10 @@
 
    <persistence-unit name="databaseConfig"
                      transaction-type="RESOURCE_LOCAL">
+      <mapping-file>META-INF/orm.xml</mapping-file>
       <properties>
 	     <property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.ClientDriver"/>
-         <property name="hibernate.connection.url" value="jdbc:derby://localhost:50000/Hibernate"/>
+         <property name="hibernate.connection.url" value="jdbc:derby://localhost:50000/Inlamning2"/>
 
          <!-- we do not need user name and password for the course
          <property name="hibernate.connection.username" value=""/>
@@ -24,4 +25,5 @@
       </properties>
 
    </persistence-unit>
+
 </persistence>

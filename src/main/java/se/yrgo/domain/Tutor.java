@@ -18,7 +18,6 @@ public class Tutor {
     private int salary;
 
     @OneToMany(cascade = {CascadeType.PERSIST})
-    @JoinColumn(name = "TUTOR_FK")
     private Set<Student> teachingGroup;
 
     @ManyToMany(mappedBy = "tutors")

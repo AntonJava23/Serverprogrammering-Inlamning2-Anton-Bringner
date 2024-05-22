@@ -22,7 +22,6 @@ public class Student {
     @Column(length = 20)
     private Address address;
 
-
     public Student() {
     }
 
@@ -51,7 +50,7 @@ public class Student {
     }
 
     public String toString() {
-        return name + " lives at: " + address;
+        return name;
     }
 
     @Override

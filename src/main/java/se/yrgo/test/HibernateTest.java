@@ -16,36 +16,40 @@ public class HibernateTest {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-//        Query q2 =em.createQuery("select tutor.teachingGroup from Tutor as tutor where tutor.name= 'Johan Smith'");
-//        List<Student> studentsForJohan = q2.getResultList();
-//        for (Student s : studentsForJohan) {
-//            System.out.println(s);
-//        }
-//
-//        Subject programming = em.find(Subject.class, 7);
-//        TypedQuery<Tutor> query = em.createQuery("from Tutor tutor where :subject member of tutor.subjectsToTeach", Tutor.class);
-//        query.setParameter("subject", programming);
-//        List<Tutor> tutorsForProgramming = query.getResultList();
-//        for (Tutor tutor : tutorsForProgramming) {
-//            System.out.println(tutor);
-//        }
+        // Uppgift 1 - Navigera över relationer(med member of)
+        Subject science = em.find(Subject.class, 2);
+        Query query1 = em.createQuery("select t.teachingGroup from Tutor t where :subject member of t.subjectsToTeach");
+        query1.setParameter("subject", science);
+        List<Student> withScienceTutors = query1.getResultList();
+        System.out.println("All students with a tutor that can teach science:");
+        for (Student student : withScienceTutors) {
+            System.out.println("- " + student);
+        }
 
-//        Query query2 = em.createQuery("from Tutor as tutor join tutor.teachingGroup as student where student.address.city = 'city 2'");
-//        List<Object[]> results = query2.getResultList();
-//        for (Object[] item : results) {
-//            System.out.println(item[0] + " -------------------- " + item[1]);
-//        }
+        // Uppgift 2 - Report Query Multiple fields (med join)
+        List<Object[]>query2 = em.createQuery(
+                "from Tutor as tutor join tutor.teachingGroup as student").getResultList();
+        for(Object[] obj:query2) {
+            System.out.println("- Tutor: " + obj[0] + " || Student: " + obj[1]);
+        }
 
-//        Query query3 = em.createQuery("select distinct tutor from Tutor as tutor join tutor.teachingGroup as student where student.address.city = 'city 2'");
-//        List<Tutor> results2 = query3.getResultList();
-//        for (Tutor t : results2) {
-//            System.out.println(t);
-//        }
+        // Uppgift 3 - Report Query Aggregation
+        double averageSemesterLength = (Double)em.createQuery("select avg(subject.semesterLength) from Subject subject")
+                .getSingleResult();
+        System.out.println("Average semester length: " + averageSemesterLength);
 
-        String city = "city 2";
-        List<Tutor> results3 = em.createQuery("select distinct tutor from Tutor tutor join tutor.teachingGroup student where student.address.city = :city").setParameter("city", city).getResultList();
-        for (Tutor tutor : results3) {
-            System.out.println(tutor);
+        // Uppgift 4 - Query med Aggregation
+        int highestSalary = (int)em.createQuery("select max(tutor.salary) from Tutor tutor")
+                .getSingleResult();
+        System.out.println("Tutor with highest salary: " + highestSalary);
+
+
+        // Uppgift 5 - NamedQuery
+        // Skriv en named query som kan returnera alla tutors som har en lön högre än 10 000.
+        List<Tutor> query5 = em.createNamedQuery("searchBySalary", Tutor.class).getResultList();
+        System.out.println("Tutors with a salary higher than 10000");
+        for(Tutor tutor: query5) {
+            System.out.println("- " + tutor);
         }
 
 
@@ -59,9 +63,9 @@ public class HibernateTest {
         tx.begin();
 
 
-        Subject mathematics = new Subject("Mathematics", 2);
-        Subject science = new Subject("Science", 2);
-        Subject programming = new Subject("Programming", 3);
+        Subject mathematics = new Subject("Mathematics", 2, 30);
+        Subject science = new Subject("Science", 2, 25);
+        Subject programming = new Subject("Programming", 3, 44);
 //        em.persist(mathematics);
 //        em.persist(science);
 //        em.persist(programming);

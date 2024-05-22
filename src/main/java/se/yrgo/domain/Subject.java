@@ -16,6 +16,7 @@ public class Subject {
     @Column(length = 15)
     private String subjectName;
     private int numberOfSemesters;
+    private int semesterLength;
 
     @Column(length = 15)
     @ManyToMany
@@ -24,9 +25,10 @@ public class Subject {
 
     public Subject() {}
 
-    public Subject(String subjectName, int numberOfSemesters) {
+    public Subject(String subjectName, int numberOfSemesters, int semesterLength) {
         this.subjectName = subjectName;
         this.numberOfSemesters=numberOfSemesters;
+        this.semesterLength=semesterLength;
         this.tutors = new HashSet<Tutor>();
     }
 
